@@ -4,10 +4,9 @@ from sklearn.impute import KNNImputer
 from sklearn import preprocessing
 
 """
-Opracowanie:
-    Autorzy: Hubert Korzeniewski
-             Adrian Szostak
-    Temat:   Sieci Neuronowe dla Klasyfikacji
+Authors:
+Hubert Korzeniewski s19469
+Adrian Szostak s19777
 
 Wejście:
     Heart Disease Prediction. W celu uruchomienia trzeba pobrać bazę z https://www.kaggle.com/gcdatkin/heart-disease-prediction/data
