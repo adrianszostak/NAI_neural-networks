@@ -70,7 +70,7 @@ X_test, y_test = X[num_training:], y[num_training:]
 Neural Network Classifier
 '''
 mlp = MLPClassifier(
-    hidden_layer_sizes=(120, 80),
+    hidden_layer_sizes=(1200,500,70),
     max_iter=3, #maksymalna liczba iteracji
     alpha=1e-4, #warunek regulujący
     solver="sgd", #odnosi się do stochastycznego spadku gradientu.
