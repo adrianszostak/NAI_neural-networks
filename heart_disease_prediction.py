@@ -2,11 +2,14 @@ import pandas as pd
 from sklearn.neural_network import MLPClassifier
 from sklearn.impute import KNNImputer
 from sklearn import preprocessing
+import warnings
+from sklearn.exceptions import ConvergenceWarning
 
 """
-Authors:
-Hubert Korzeniewski s19469
-Adrian Szostak s19777
+Opracowanie:
+    Autorzy: Hubert Korzeniewski
+             Adrian Szostak
+    Temat:   Sieci Neuronowe dla Klasyfikacji
 
 Wejście:
     Heart Disease Prediction. W celu uruchomienia trzeba pobrać bazę z https://www.kaggle.com/gcdatkin/heart-disease-prediction/data
@@ -26,6 +29,10 @@ Wejście:
     13.thal: 3 = normal; 6 = fixed defect; 7 = reversable defect
     14.heart disease: 1 = yes, 2 = no
 
+
+
+
+
 Wyjście:
     Program wyświetla skuteczność przewidywania dla danych testowych
 
@@ -38,34 +45,21 @@ Dokumentacja kodu źródłowego:
     sklearn - https://scikit-learn.org/stable/user_guide.html
 """
 
-'''
-Data loading
-'''
 input_file = 'heart.csv'
 data = pd.read_csv(input_file, header=None, skiprows=[0])
 
 X, y = data.loc[1:, 0:13], data.loc[1:, 13:]
 
-'''
-Using k-NN imputer replace NaN -> kNNValue
-'''
+# Cleaning dataset with kNN-Imputer
 knn = KNNImputer()
 knn.fit(X)
 new_X = knn.transform(X)
 new_X = pd.DataFrame(new_X)
 
-'''
-Scaling
-'''
-new_X = preprocessing.minmax_scale(new_X)
-new_X = pd.DataFrame(new_X)
-
 y = y.astype(int).values
 y = y.ravel()
 
-'''
-Division into test and training data
-'''
+# Train and test split
 num_training = int(0.8 * len(X))
 num_test = len(X) - num_training
 # Training data
@@ -74,7 +68,11 @@ X_train, y_train = X[:num_training], y[:num_training]
 # Test data
 X_test, y_test = X[num_training:], y[num_training:]
 
-nn_model = MLPClassifier()
-nn_model.fit(X_train, y_train)
+mlp = MLPClassifier()
 
-print("Neural Network Accuracy: {:.2f}%".format(nn_model.score(X_test, y_test) * 100))
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", category=ConvergenceWarning, module="sklearn")
+    mlp.fit(X_train, y_train)
+
+print("Training set score: %f" % mlp.score(X_train, y_train))
+print("Test set score: %f" % mlp.score(X_test, y_test))
